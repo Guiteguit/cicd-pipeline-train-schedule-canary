@@ -38,6 +38,19 @@ pipeline {
                 }
             }
         }
+        stage('DeployTocanary') {
+            when {
+                branch 'master'
+            }
+            steps {
+                input 'Deploy to Canary Test'
+                kubernetesDeploy(
+                    kubeconfigId: 'kubeconfig',
+                    configs: 'train-schedule-canary.yml',
+                    enableConfigSubstitution: true
+                )
+            }
+        }
         stage('DeployToProduction') {
             when {
                 branch 'master'
